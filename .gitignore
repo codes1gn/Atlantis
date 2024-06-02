@@ -1,5 +1,5 @@
 # venv python path
-atlantis-py*-base/
+atlantis-*-base/
 
 # module
 /benchmarks/dataset/*
