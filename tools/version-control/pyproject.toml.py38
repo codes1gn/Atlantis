@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "atlantis"
-version = "0.1.0"
+version = "0.2.0"
 description = "All-in-one Toolkit for Computing Systems Benchmarks/Experiments/Managements"
 authors = ["Albert.Shi <heng.shi@sjtu.edu.cn>"]
 license = "MIT"
@@ -35,9 +35,6 @@ onnx = "^1.16.0"
 onnxruntime = "^1.17.3"
 einops = "^0.8.0"
 bitarray = "^2.9.2"
-
-[[tool.poetry.packages]]
-include = "../Atlantis"
 
 [build-system]
 requires = ["poetry-core"]

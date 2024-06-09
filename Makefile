@@ -1,10 +1,17 @@
+#!/bin/bash
+
 # 检测Python版本并设置环境变量
 CUR_PYVERSION := $(shell python -c 'import sys; print("py{}{}".format(sys.version_info.major,sys.version_info.minor));')
 PYVERSION ?= $(CUR_PYVERSION)
 VENV_NAME_BASE = atlantis
 VENV_NAME := $(VENV_NAME_BASE)-$(PYVERSION)-base
 ACTIVATE_SCRIPT := bin/activate
-SHELL_PATH := $(shell echo $$SHELL)
+# 检测 Fish shell 是否可用
+ifeq (, $(shell which fish))
+  RUN_SHELL = bash
+else
+  RUN_SHELL = fish
+endif
 
 .DEFAULT_GOAL := help
 
@@ -72,7 +79,21 @@ install-atlantis: bootstrap
 	@poetry lock --no-update
 	@poetry install
 
+.PHONY: enter-dev-env exit-dev-env
+enter-dev-env:
+	@echo "Activating environment"
+ifeq ($(RUN_SHELL), fish)
+	@fish tools/python-env/enter-dev-env.fish && cd $(word 2, $(MAKECMDGOALS))
+else
+	@. tools/python-env/enter-dev-env.sh && cd $(word 2, $(MAKECMDGOALS))
+endif
 
+exit-dev-env:
+	deactivate
+
+.PHONY: boost install enter
 # Targets Aliases
 boot: bootstrap
 install: install-atlantis
+enter: enter-dev-env
+exit: exit-dev-env
